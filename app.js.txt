@@ -1,0 +1,49 @@
+
+const tools = [
+  {id:'jpg-to-pdf', icon:'🖼️', title:'JPG to PDF', desc:'Convert images to PDF. Merge multiple JPGs into one PDF.'},
+  {id:'png-to-jpg', icon:'🎨', title:'PNG to JPG', desc:'Convert PNG to JPG with white background and compression.'},
+  {id:'pdf-to-jpg', icon:'📄', title:'PDF to JPG', desc:'Extract pages from PDF as high-quality JPG images.'},
+  {id:'merge-pdf', icon:'🔗', title:'Merge PDF', desc:'Combine multiple PDFs into one document in seconds.'},
+  {id:'split-pdf', icon:'✂️', title:'Split PDF', desc:'Separate PDF pages or extract specific ranges.'},
+  {id:'compress-pdf', icon:'🗜️', title:'Compress PDF', desc:'Reduce PDF size without losing quality.'},
+];
+
+const grid = document.getElementById('tools');
+grid.innerHTML = tools.map(t => `
+  <div class="card" data-tool="${t.id}">
+    <div class="card-icon">${t.icon}</div>
+    <h3>${t.title}</h3>
+    <p>${t.desc}</p>
+    <div style="margin-top:auto;padding-top:10px"><span class="btn" style="font-size:13px;padding:8px 12px">Open tool</span></div>
+  </div>
+`).join('');
+
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('file');
+
+['dragenter','dragover'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault(); drop.classList.add('drag')}));
+['dragleave','drop'].forEach(e => drop.addEventListener(e, ev => {ev.preventDefault(); drop.classList.remove('drag')}));
+drop.addEventListener('drop', ev => {
+  const files = ev.dataTransfer.files;
+  handleFiles(files);
+});
+drop.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+function handleFiles(files){
+  if(!files.length) return;
+  const names = Array.from(files).map(f=>f.name).join(', ');
+  drop.innerHTML = `<div style="font-weight:650">✓ ${files.length} file(s) selected</div><div style="font-size:13px;color:#6b7280;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${names}</div><div style="margin-top:14px"><button class="btn" onclick="location.reload()">Convert now</button></div>`;
+}
+
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    const id = card.dataset.tool;
+    alert(id + ' tool - client-side processing coming next. For now files stay local.');
+  });
+});
+
+// idle work
+if('requestIdleCallback' in window){
+  requestIdleCallback(()=>{console.log('ConvertPDFQuik premium ready')});
+}

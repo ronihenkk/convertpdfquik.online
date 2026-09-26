@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block AI scrapers yang boros bandwidth (opsional)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://convertpdfquik.online/sitemap.xml
